@@ -1,0 +1,58 @@
+Particle Swarm Optimization Results Summary:
+served_passengers: 77.0000
+avg_waiting_time: 1.3743
+avg_travel_time: 16.0493
+total_distance: 652.6293
+total_cost: 1438.6797
+unit_cost: 18.6842
+vehicle_utilization: 1.0000
+avg_capacity_util: 0.3172
+
+==================================================
+
+Vehicle 0 Route:
+  - Pickup P43.0 at (7.64, 15.44), Onboard: 1
+  - Pickup P57.0 at (7.05, 14.25), Onboard: 2
+  - Pickup P71.0 at (9.91, 8.56), Onboard: 3
+  - Dropoff P57.0 at (12.14, 5.84), Onboard: 2
+  - Dropoff P71.0 at (11.94, 5.04), Onboard: 1
+  - Dropoff P43.0 at (10.39, 3.53), Onboard: 0
+
+动画保存为: vehicle_0.gif
+
+==================================================
+
+Vehicle 1 Route:
+  - Pickup P13.0 at (11.48, 11.31), Onboard: 1
+  - Pickup P90.0 at (11.92, 9.84), Onboard: 2
+  - Pickup P16.0 at (11.29, 9.63), Onboard: 3
+  - Dropoff P13.0 at (10.03, 8.59), Onboard: 2
+  - Dropoff P90.0 at (0.00, 9.47), Onboard: 1
+  - Dropoff P16.0 at (0.00, 9.84), Onboard: 0
+
+动画保存为: vehicle_1.gif
+
+==================================================
+
+Vehicle 2 Route:
+  - Pickup P93.0 at (5.07, 12.52), Onboard: 1
+  - Pickup P97.0 at (7.35, 7.12), Onboard: 2
+  - Dropoff P93.0 at (6.82, 5.24), Onboard: 1
+  - Dropoff P97.0 at (8.35, 0.00), Onboard: 0
+
+动画保存为: vehicle_2.gif
+
+==================================================
+
+Vehicle 3 Route:
+  - Pickup P67.0 at (5.89, 11.22), Onboard: 1
+  - Dropoff P67.0 at (11.47, 6.96), Onboard: 0
+  - Pickup P73.0 at (10.49, 6.13), Onboard: 1
+  - Pickup P96.0 at (9.44, 8.90), Onboard: 2
+  - Dropoff P73.0 at (10.15, 12.99), Onboard: 1
+  - Dropoff P96.0 at (13.69, 14.55), Onboard: 0
+
+动画保存为: vehicle_3.gif
+
+==================================================
+
