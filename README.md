@@ -24,9 +24,9 @@
 
 目标函数由三部分组成：
 
-总行驶成本：c 表示单位距离的行驶成本（代码中为 COST_PER_KM）；
+总行驶成本：单位距离的行驶成本（代码中为 COST_PER_KM）；
 
-固定成本：Cf 表示每辆车一旦启用即产生的固定成本（代码中为 FIXED_COST）；
+固定成本：每辆车一旦启用即产生的固定成本（代码中为 FIXED_COST）；
 
 总惩罚成本：包括等候时长惩罚和行程超时惩罚。
 
@@ -100,10 +100,10 @@
 | `avg_waiting_time`    | 平均等待时间（从请求到上车）      |
 | `avg_travel_time`     | 平均乘车时间              |
 | `total_distance`      | 所有车辆行驶总距离           |
-| `total_cost`          | 总运营成本（含惩罚项）         |
+| `total_cost`          | 总运营成本        |
 | `unit_cost`           | 单位乘客服务成本            |
-| `vehicle_utilization` | 车辆使用率（使用车辆数 / 总车辆数） |
-| `avg_capacity_util`   | 平均容量利用率（加权时间利用）     |
+| `vehicle_utilization` | 车辆使用率 |
+| `avg_capacity_util`   | 平均容量利用率     |
 
 ---
 
