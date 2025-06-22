@@ -21,24 +21,22 @@
 ## 优化目标
 
 目标：**最小化系统总成本**，兼顾乘客满意度与调度可行性。
-<script type="math/tex">
-\text{Total Cost} = \sum_{v \in V} \left( \text{Distance Cost} + \text{Fixed Cost} \right) + \sum_{p \in P} \left( \text{Time Delay Penalty} + \text{Overtravel Penalty} \right)
-</script>
+目标函数由三部分组成：
 
+总行驶成本：
+c 表示单位距离的行驶成本（代码中为 COST_PER_KM）；
 
+固定成本：
+Cf 表示每辆车一旦启用即产生的固定成本（代码中为 FIXED_COST）；
 
-- **Distance Cost**：车辆行驶距离 × 单位成本  
-- **Fixed Cost**：每辆被调用的车辆固定成本  
-- **Time Delay Penalty**：
-  - 超过 `preferred_start` 小惩罚（系数 α₁）
-  - 超过 `preferred_end` 大惩罚（系数 α₂）
-- **Overtravel Penalty**：绕路距离超容忍度部分惩罚（系数 β）
+总惩罚成本：
+包括等候时长惩罚和行程超时惩罚。
 
 ---
 
 ## 约束条件
 
-调度方案需满足以下约束：
+调度方案满足以下约束：
 
 1. **容量约束**：每辆车同时最多搭载 `MAX_CAPACITY` 名乘客；
 2. **时窗约束**：
