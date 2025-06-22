@@ -21,9 +21,10 @@
 ## 优化目标
 
 目标：**最小化系统总成本**，兼顾乘客满意度与调度可行性。
-$$
+<script type="math/tex">
 \text{Total Cost} = \sum_{v \in V} \left( \text{Distance Cost} + \text{Fixed Cost} \right) + \sum_{p \in P} \left( \text{Time Delay Penalty} + \text{Overtravel Penalty} \right)
-$$
+</script>
+
 
 
 - **Distance Cost**：车辆行驶距离 × 单位成本  
