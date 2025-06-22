@@ -1,60 +1,58 @@
-���Ƚ���ؼ�����ָ�꣨KPI��:
+调度结果关键性能指标（KPI）:
 ==================================================
-served_passengers: 81
-avg_waiting_time: 3.15
-avg_travel_time: 27.00
-total_distance: 961.17
-total_cost: 3020.30
-unit_cost: 37.29
+served_passengers: 82
+avg_waiting_time: 2.66
+avg_travel_time: 30.46
+total_distance: 1050.23
+total_cost: 3294.94
+unit_cost: 40.18
 vehicle_utilization: 1.00
-avg_capacity_util: 0.38
+avg_capacity_util: 0.40
 ==================================================
 
-����·����ϸ��Ϣ:
+车辆路线详细信息:
 ==================================================
-���� 0 ·��:
-  PICKUP �˿� P7.0 at (9.82, 17.82), ���ڳ˿���: 1
-  PICKUP �˿� P68.0 at (7.64, 11.16), ���ڳ˿���: 2
-  DROPOFF �˿� P68.0 at (1.31, 1.56), ���ڳ˿���: 1
-  DROPOFF �˿� P7.0 at (0.00, 14.93), ���ڳ˿���: 0
-  ����ʻ����: 35.44 km
-  ����˿���: 2
+车辆 0 路线:
+  PICKUP 乘客 P11.0 at (7.35, 12.57), 车内乘客数: 1
+  PICKUP 乘客 P60.0 at (12.74, 8.99), 车内乘客数: 2
+  DROPOFF 乘客 P60.0 at (8.69, 16.59), 车内乘客数: 1
+  DROPOFF 乘客 P11.0 at (10.58, 15.81), 车内乘客数: 0
+  总行驶距离: 19.51 km
+  服务乘客数: 2
 
-���� 0 ��·�߶����ѱ���Ϊ: jingtai/results/ant_colony_optimization/vehicle_0.gif
+车辆 0 的路线动画已保存为: aco_results/vehicle_0.gif
 --------------------------------------------------
-���� 1 ·��:
-  PICKUP �˿� P64.0 at (13.12, 13.14), ���ڳ˿���: 1
-  PICKUP �˿� P25.0 at (11.30, 13.91), ���ڳ˿���: 2
-  PICKUP �˿� P83.0 at (10.60, 12.57), ���ڳ˿���: 3
-  DROPOFF �˿� P25.0 at (2.58, 2.08), ���ڳ˿���: 2
-  DROPOFF �˿� P83.0 at (14.27, 3.25), ���ڳ˿���: 1
-  DROPOFF �˿� P64.0 at (9.93, 4.62), ���ڳ˿���: 0
-  ����ʻ����: 35.30 km
-  ����˿���: 3
+车辆 1 路线:
+  PICKUP 乘客 P41.0 at (14.77, 13.26), 车内乘客数: 1
+  PICKUP 乘客 P29.0 at (14.82, 12.06), 车内乘客数: 2
+  PICKUP 乘客 P72.0 at (12.60, 17.66), 车内乘客数: 3
+  DROPOFF 乘客 P29.0 at (14.93, 20.00), 车内乘客数: 2
+  DROPOFF 乘客 P72.0 at (9.35, 12.41), 车内乘客数: 1
+  DROPOFF 乘客 P41.0 at (8.11, 14.55), 车内乘客数: 0
+  总行驶距离: 25.76 km
+  服务乘客数: 3
 
-���� 1 ��·�߶����ѱ���Ϊ: jingtai/results/ant_colony_optimization/vehicle_1.gif
+车辆 1 的路线动画已保存为: aco_results/vehicle_1.gif
 --------------------------------------------------
-���� 2 ·��:
-  PICKUP �˿� P3.0 at (5.80, 8.45), ���ڳ˿���: 1
-  PICKUP �˿� P69.0 at (6.41, 8.93), ���ڳ˿���: 2
-  PICKUP �˿� P97.0 at (7.35, 7.12), ���ڳ˿���: 3
-  DROPOFF �˿� P97.0 at (8.35, 0.00), ���ڳ˿���: 2
-  PICKUP �˿� P52.0 at (8.74, 3.76), ���ڳ˿���: 3
-  DROPOFF �˿� P52.0 at (19.79, 1.42), ���ڳ˿���: 2
-  DROPOFF �˿� P69.0 at (11.87, 18.85), ���ڳ˿���: 1
-  DROPOFF �˿� P3.0 at (11.99, 15.85), ���ڳ˿���: 0
-  ����ʻ����: 49.28 km
-  ����˿���: 4
+车辆 2 路线:
+  PICKUP 乘客 P52.0 at (8.74, 3.76), 车内乘客数: 1
+  DROPOFF 乘客 P52.0 at (19.79, 1.42), 车内乘客数: 0
+  PICKUP 乘客 P18.0 at (9.83, 4.16), 车内乘客数: 1
+  DROPOFF 乘客 P18.0 at (16.86, 14.51), 车内乘客数: 0
+  总行驶距离: 37.70 km
+  服务乘客数: 2
 
-���� 2 ��·�߶����ѱ���Ϊ: jingtai/results/ant_colony_optimization/vehicle_2.gif
+车辆 2 的路线动画已保存为: aco_results/vehicle_2.gif
 --------------------------------------------------
-���� 3 ·��:
-  PICKUP �˿� P43.0 at (7.64, 15.44), ���ڳ˿���: 1
-  PICKUP �˿� P32.0 at (10.07, 17.27), ���ڳ˿���: 2
-  DROPOFF �˿� P43.0 at (10.39, 3.53), ���ڳ˿���: 1
-  DROPOFF �˿� P32.0 at (8.41, 20.00), ���ڳ˿���: 0
-  ����ʻ����: 36.08 km
-  ����˿���: 2
+车辆 3 路线:
+  PICKUP 乘客 P9.0 at (8.90, 11.79), 车内乘客数: 1
+  PICKUP 乘客 P58.0 at (5.86, 7.20), 车内乘客数: 2
+  PICKUP 乘客 P92.0 at (7.43, 4.70), 车内乘客数: 3
+  DROPOFF 乘客 P58.0 at (14.48, 13.66), 车内乘客数: 2
+  DROPOFF 乘客 P9.0 at (18.87, 6.89), 车内乘客数: 1
+  DROPOFF 乘客 P92.0 at (9.62, 15.73), 车内乘客数: 0
+  总行驶距离: 44.53 km
+  服务乘客数: 3
 
-���� 3 ��·�߶����ѱ���Ϊ: jingtai/results/ant_colony_optimization/vehicle_3.gif
+车辆 3 的路线动画已保存为: aco_results/vehicle_3.gif
 --------------------------------------------------

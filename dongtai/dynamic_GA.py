@@ -430,33 +430,38 @@ def update_simulation_state(vehicles_state, passengers, time_step):
     return vehicles_state
 
 # ==================== 评估与可视化  ====================
+# ==================== 评估与可视化 (修改后版本) ====================
 
 def generate_final_report_and_metrics_unified(vehicles_state, passengers):
     """
     统一的最终报告与指标生成函数。
-    [该版本融合了代码2的评估逻辑，并适配了动态模拟的历史数据]
+    [该版本已修改 "服务人数" 的定义为 "所有上过车的乘客"]
     """
     # 初始化所有指标
     total_distance = 0.0
     total_waiting_time = 0.0
     total_travel_time = 0.0
     total_cost_val = 0.0
-    
-    # 用于计算平均容量利用率的变量
-    total_capacity_used = 0.0  # Sum of (onboard_count * segment_duration)
-    total_capacity_time = 0.0  # Sum of all vehicle travel durations
+    total_capacity_used = 0.0
+    total_capacity_time = 0.0
 
-    # 识别乘客服务状态
+    # --- 修改点 1: 核心定义变更 ---
+    # 旧定义: fully_served_pids = {pid for pid, p_info in passengers.items() if 'actual_dropoff_time' in p_info}
+    # 新定义: pids_with_pickup 成为我们衡量 "服务人数" 的标准
     pids_with_pickup = {pid for pid, p_info in passengers.items() if 'actual_pickup_time' in p_info}
     fully_served_pids = {pid for pid, p_info in passengers.items() if 'actual_dropoff_time' in p_info}
     
-    # --- 1. 遍历每辆车的历史记录来计算核心数据 ---
+    # 新的服务人数定义
+    num_served_new_def = len(pids_with_pickup)
+    # 保持旧的定义用于计算必须完成行程才能计算的指标
+    num_fully_served_for_calc = len(fully_served_pids)
+    
+    # --- 1. 遍历每辆车的历史记录来计算核心数据 (这部分不变) ---
     for vid, v_data in vehicles_state.items():
         full_path = v_data['full_path_history']
         if len(full_path) <= 1:
-            continue # 该车未移动
+            continue
 
-        # --- 计算总距离和总行驶时间 ---
         for i in range(len(full_path) - 1):
             pos1, time1 = full_path[i]
             pos2, time2 = full_path[i+1]
@@ -468,12 +473,8 @@ def generate_final_report_and_metrics_unified(vehicles_state, passengers):
             total_distance += segment_dist
             total_capacity_time += segment_duration
 
-            # --- 计算平均容量利用率的关键部分 ---
-            # 找出在该时间段 [time1, time2] 内车上的乘客
             onboard_pids_in_segment = set()
-            # 初始就在车上的
             onboard_pids_in_segment.update(v_data['onboard'] if v_data['current_time'] <= time1 else set())
-            # 遍历服务历史，确定在 time1 时刻车上有谁
             for stop in v_data['served_stops_history']:
                 stop_pid, _, _, stop_type = stop
                 event_time = passengers[stop_pid].get('actual_pickup_time' if stop_type == 'pickup' else 'actual_dropoff_time', float('inf'))
@@ -486,17 +487,20 @@ def generate_final_report_and_metrics_unified(vehicles_state, passengers):
             total_capacity_used += len(onboard_pids_in_segment) * segment_duration
 
     # --- 2. 基于乘客的最终状态计算时间相关指标 ---
-    num_fully_served = len(fully_served_pids)
-    if num_fully_served > 0:
+    # 修改点 2: 调整总等待时间和总行程时间的计算逻辑
+    if num_served_new_def > 0:
+        # 等待时间对所有 "上过车" 的乘客计算
+        for pid in pids_with_pickup:
+            p_info = passengers[pid]
+            total_waiting_time += p_info['actual_pickup_time'] - p_info['request_time']
+            
+    if num_fully_served_for_calc > 0:
+        # 行程时间只对 "已送达" 的乘客计算
         for pid in fully_served_pids:
             p_info = passengers[pid]
-            # 等待时间 = 实际上车时间 - 请求时间
-            total_waiting_time += p_info['actual_pickup_time'] - p_info['request_time']
-            # 乘车时间 = 实际下车时间 - 实际上车时间
             total_travel_time += p_info['actual_dropoff_time'] - p_info['actual_pickup_time']
             
-    # --- 3. 重新计算总成本 (与代码2的评估方式保持一致) ---
-    # 这部分直接从你原来的函数中借鉴，因为它的计算方式是准确的
+    # --- 3. 重新计算总成本 (这部分不变) ---
     total_fixed_cost = 0.0
     total_penalty = 0.0
     used_vehicles = 0
@@ -518,32 +522,37 @@ def generate_final_report_and_metrics_unified(vehicles_state, passengers):
         if pid in fully_served_pids:
             delta = p_info['actual_dropoff_time'] - actual_pickup_time
             shortest = p_info['min_travel_time']
-            if delta > shortest * DELAT:
-                total_penalty += BETA * (delta - shortest)
+            if delta > shortest * DELAT: # 注意：绕路惩罚依然只能对已完成行程的乘客计算
+                penalty += BETA * (delta - shortest)
     
     total_distance_cost = total_distance * COST_PER_KM
     total_cost_val = total_distance_cost + total_fixed_cost + total_penalty
             
-    # --- 4. 计算最终的平均指标 ---
-    avg_waiting_time = total_waiting_time / num_fully_served if num_fully_served > 0 else 0
-    avg_travel_time = total_travel_time / num_fully_served if num_fully_served > 0 else 0
-    unit_cost = total_cost_val / num_fully_served if num_fully_served > 0 else 0
+    # --- 4. 计算最终的平均指标 (修改点 3: 使用新的分母) ---
+    avg_waiting_time = total_waiting_time / num_served_new_def if num_served_new_def > 0 else 0
+    # 注意: avg_travel_time 的分母保持为 num_fully_served_for_calc，因为只有他们有 travel_time
+    avg_travel_time = total_travel_time / num_fully_served_for_calc if num_fully_served_for_calc > 0 else 0
+    unit_cost = total_cost_val / num_served_new_def if num_served_new_def > 0 else 0
     vehicle_utilization = used_vehicles / len(vehicles_state) if vehicles_state else 0
     avg_capacity_util = (total_capacity_used / MAX_CAPACITY) / total_capacity_time if total_capacity_time > 0 else 0
+    # 修改点 4: 更新未服务乘客数的计算
+    unserved_passengers = len(passengers) - num_served_new_def
 
-    # --- 5. 返回与代码2一致的、结构化的字典 ---
+    # --- 5. 返回结构化的字典 (修改点 5: 使用新的服务人数) ---
     return {
-        'served_passengers': num_fully_served,
+        'served_passengers': num_served_new_def,  # 使用新的定义
         'avg_waiting_time': avg_waiting_time,
-        'avg_travel_time': avg_travel_time,
+        # 建议在报告中注明 avg_travel_time 的计算口径
+        'avg_travel_time (of completed trips only)': avg_travel_time, 
         'total_distance': total_distance,
         'total_cost': total_cost_val,
         'unit_cost': unit_cost,
         'vehicle_utilization': vehicle_utilization,
-        'avg_capacity_util': avg_capacity_util, # 新增的核心指标
-        # 额外保留一些有用的诊断信息
-        'unserved_passengers': len(passengers) - num_fully_served,
+        'avg_capacity_util': avg_capacity_util,
+        'unserved_passengers': unserved_passengers,
         'total_penalty_cost': total_penalty,
+        # 您也可以选择性地报告已完成行程的乘客数以供对比
+        'fully_completed_passengers': num_fully_served_for_calc,
     }
 
 
@@ -609,24 +618,20 @@ def save_dynamic_animation(vehicle_id, full_path_data, passengers, served_stops_
     plt.close(fig)
 
 # ==================== 主程序入口 (动态模拟循环) ====================
-import os
-from tqdm import tqdm
-
-# ==================== 主程序入口 (动态模拟循环) ====================
 if __name__ == '__main__':
     # --- 1. 定义并创建输出目录 ---
-    output_dir = os.path.join('dongtai', 'results', 'dynamic_GA')
+    # 这是新增的部分，确保结果文件夹存在，如果不存在会自动创建
+    output_dir = 'dongtai/results/dynamic_GA'
     os.makedirs(output_dir, exist_ok=True)
 
-    # 初始化车辆状态
     vehicles_state = initialize_vehicles_dynamic()
-
+    
     print("--- 开始动态车辆调度模拟 (结合最终修复版遗传算法进行重优化) ---")
     with tqdm(range(T), desc="模拟时间推进") as pbar:
         for t in pbar:
             vehicles_state = update_simulation_state(vehicles_state, passengers_dict, TIME_INTERVAL)
             new_request_ids = D_t_list[t] if t < len(D_t_list) else []
-
+            
             if new_request_ids and GA_REOPT_ENABLED:
                 reoptimized_routes = genetic_algorithm_reoptimizer(vehicles_state, passengers_dict, new_request_ids)
                 if reoptimized_routes:
@@ -634,42 +639,46 @@ if __name__ == '__main__':
                         vehicles_state[vid]['route'] = reoptimized_routes[i]
                 pbar.set_postfix_str(f"新请求:{len(new_request_ids)}, GA重优化启动")
             else:
-                pbar.set_postfix_str(f"无新请求")
+                 pbar.set_postfix_str(f"无新请求")
 
     # --- 模拟结束，生成最终报告 ---
     print("\n--- 模拟结束, 开始生成最终报告 ---")
-
-    # 调用统一评估函数
+    # 调用统一评估函数 (这部分来自我上一个回答，保持不变)
     metrics = generate_final_report_and_metrics_unified(vehicles_state, passengers_dict)
-
+    
     # --- 2. 修改报告文件的输出路径 ---
+    # 使用 os.path.join 来构建完整的文件路径
     output_filename = os.path.join(output_dir, 'result_summary_dynamic_ga.txt')
 
+    # 使用你提供的代码片段进行文件写入
+    # --- 这是修复后的代码 ---
     with open(output_filename, 'w', encoding='utf-8') as f:
         f.write("="*20 + " 动态调度最终评估报告 (统一指标版) " + "="*20 + "\n\n")
-
+        
         f.write("核心性能指标:\n")
-        f.write(f"  服务乘客数: {metrics['served_passengers']}\n")
+        f.write(f"  服务乘客数 (至少被接上车): {metrics['served_passengers']}\n")
+        f.write(f"  完全送达乘客数: {metrics['fully_completed_passengers']}\n")
         f.write(f"  平均等待时间: {metrics['avg_waiting_time']:.2f} 分钟\n")
-        f.write(f"  平均行程时间: {metrics['avg_travel_time']:.2f} 分钟\n")
+        # 使用新的键名，并更新了文本描述使其更清晰
+        f.write(f"  平均行程时间 (仅限已送达乘客): {metrics['avg_travel_time (of completed trips only)']:.2f} 分钟\n")
         f.write(f"  总行驶距离: {metrics['total_distance']:.2f} 公里\n")
         f.write(f"  总调度成本: {metrics['total_cost']:.2f} 元\n")
         f.write(f"    - 其中惩罚成本: {metrics['total_penalty_cost']:.2f} 元\n")
-        f.write(f"  单位服务成本: {metrics['unit_cost']:.2f} 元/人\n")
+        f.write(f"  单位服务成本 (按接上车人数算): {metrics['unit_cost']:.2f} 元/人\n")
         f.write(f"  车辆使用率: {metrics['vehicle_utilization']:.2%}\n")
         f.write(f"  平均容量利用率: {metrics['avg_capacity_util']:.2%}\n")
-        f.write(f"  未服务乘客数: {metrics['unserved_passengers']}\n")
+        f.write(f"  未服务乘客数 (从未被接上车): {metrics['unserved_passengers']}\n")
 
         f.write("\n" + "="*70 + "\n\n")
 
+        
         f.write("各车辆服务历史详情:\n\n")
         for vid in sorted(vehicles_state.keys()):
-            if int(vid) not in TARGET_VEHICLES:
-                continue
-
+            if int(vid) not in TARGET_VEHICLES: continue
+            
             v_data = vehicles_state[vid]
             f.write(f"--- 车辆 {vid} ---\n")
-
+            
             if not v_data['served_stops_history']:
                 f.write("  未服务任何乘客。\n\n")
                 continue
@@ -678,16 +687,16 @@ if __name__ == '__main__':
             f.write("  服务历史 (按时间顺序):\n")
             for stop in v_data['served_stops_history']:
                 pid, x, y, typ = stop
-                stop_time = passengers_dict[pid].get('actual_pickup_time' if typ == 'pickup' else 'actual_dropoff_time', 0)
+                stop_time = passengers_dict[pid].get('actual_pickup_time' if typ=='pickup' else 'actual_dropoff_time', 0)
                 f.write(f"    - [{stop_time:6.2f} min] {typ.upper():<8} P{int(pid):<3} at ({x:5.2f}, {y:5.2f})\n")
             f.write("\n")
-
-            # --- 3. 修改动画文件的保存路径 ---
+            
             full_path_data = v_data['full_path_history']
             if len(full_path_data) > 1:
+                # --- 3. 修改动画文件的保存路径 ---
                 gif_base_name = f'vehicle_{int(vid)}_dynamic_unified.gif'
                 gif_full_path = os.path.join(output_dir, gif_base_name)
-
+                
                 save_dynamic_animation(vid, full_path_data, passengers_dict, v_data['served_stops_history'], gif_full_path)
                 f.write(f"  动画已保存至: {gif_full_path}\n\n")
 

@@ -20,12 +20,12 @@ BETA = 3.0
 DELAT = 3.0
 
 # 蚁群算法参数
-NUM_ANTS = 20
+NUM_ANTS = 30
 ALPHA = 1.0  # 信息素重要程度因子
 BETA_ACO = 2.0  # 启发式信息重要程度因子
 RHO = 0.5  # 信息素挥发因子
-Q = 100.0  # 信息素增加强度系数
-MAX_ITER = 50
+Q = 80.0  # 信息素增加强度系数
+MAX_ITER = 30
 INITIAL_PHEROMONE = 0.1
 
 # 指定要输出的车辆ID列表（修改此处选择需要的车辆）
@@ -251,7 +251,6 @@ def calculate_heuristic(route, new_order, insert_pick, insert_drop, passengers, 
     return score
 
 # 评估解决方案的指标
-    return total
 def evaluate_total_cost(solution, passengers_dict):
     """计算一个完整解决方案的总成本（所有车辆成本之和）。"""
     total = 0
@@ -358,7 +357,6 @@ def evaluate_solution(vehicles, passengers):
         'vehicle_utilization': vehicle_utilization,
         'avg_capacity_util': avg_capacity_util
     }
-
 
 # 更新信息素矩阵
 def update_pheromone(pheromone_matrix, solutions, costs, rho, q):

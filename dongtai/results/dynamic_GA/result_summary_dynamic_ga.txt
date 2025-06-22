@@ -1,16 +1,17 @@
 ==================== 动态调度最终评估报告 (统一指标版) ====================
 
 核心性能指标:
-  服务乘客数: 23
-  平均等待时间: 6.39 分钟
-  平均行程时间: 13.63 分钟
-  总行驶距离: 509.24 公里
-  总调度成本: 2094.91 元
-    - 其中惩罚成本: 1435.67 元
-  单位服务成本: 91.08 元/人
+  服务乘客数 (至少被接上车): 79
+  完全送达乘客数: 24
+  平均等待时间: 6.56 分钟
+  平均行程时间 (仅限已送达乘客): 13.81 分钟
+  总行驶距离: 524.35 公里
+  总调度成本: 2145.99 元
+    - 其中惩罚成本: 1471.64 元
+  单位服务成本 (按接上车人数算): 27.16 元/人
   车辆使用率: 100.00%
-  平均容量利用率: 41.83%
-  未服务乘客数: 77
+  平均容量利用率: 42.54%
+  未服务乘客数 (从未被接上车): 21
 
 ======================================================================
 
@@ -19,43 +20,44 @@
 --- 车辆 0.0 ---
   服务乘客数 (已送达): 2
   服务历史 (按时间顺序):
-    - [ 10.77 min] PICKUP   P32  at (10.07, 17.27)
-    - [ 11.67 min] PICKUP   P7   at ( 9.82, 17.82)
-    - [ 21.68 min] PICKUP   P72  at (12.60, 17.66)
-    - [ 23.22 min] PICKUP   P86  at (13.23, 16.84)
-    - [ 32.02 min] DROPOFF  P72  at ( 9.35, 12.41)
-    - [ 40.09 min] DROPOFF  P86  at ( 4.21, 14.12)
+    - [ 10.20 min] PICKUP   P7   at ( 9.82, 17.82)
+    - [ 15.44 min] PICKUP   P40  at (12.58, 20.00)
+    - [ 21.07 min] PICKUP   P72  at (12.60, 17.66)
+    - [ 22.61 min] PICKUP   P86  at (13.23, 16.84)
+    - [ 31.41 min] DROPOFF  P72  at ( 9.35, 12.41)
+    - [ 39.49 min] DROPOFF  P86  at ( 4.21, 14.12)
 
-  动画已保存至: dongtai\results\dynamic_GA\vehicle_0_dynamic_unified.gif
+  动画已保存至: results/dynamic_GA/vehicle_0_dynamic_unified.gif
 
 --- 车辆 1.0 ---
   服务乘客数 (已送达): 0
   服务历史 (按时间顺序):
-    - [ 10.77 min] PICKUP   P13  at (11.48, 11.31)
+    - [  6.34 min] PICKUP   P13  at (11.48, 11.31)
     - [ 10.97 min] PICKUP   P8   at (10.44,  8.50)
-    - [ 21.48 min] PICKUP   P65  at (10.38,  6.61)
+    - [ 16.22 min] PICKUP   P65  at (10.38,  6.61)
     - [ 16.52 min] PICKUP   P44  at (10.23,  6.74)
 
-  动画已保存至: dongtai\results\dynamic_GA\vehicle_1_dynamic_unified.gif
+  动画已保存至: results/dynamic_GA/vehicle_1_dynamic_unified.gif
 
 --- 车辆 2.0 ---
   服务乘客数 (已送达): 1
   服务历史 (按时间顺序):
-    - [ 12.27 min] PICKUP   P12  at ( 6.49,  8.36)
-    - [ 11.52 min] PICKUP   P10  at ( 5.96,  7.49)
-    - [ 21.08 min] PICKUP   P68  at ( 7.64, 11.16)
-    - [ 24.36 min] PICKUP   P93  at ( 5.07, 12.52)
-    - [ 35.53 min] DROPOFF  P93  at ( 6.82,  5.24)
+    - [ 12.11 min] PICKUP   P12  at ( 6.49,  8.36)
+    - [ 12.52 min] PICKUP   P23  at ( 6.08,  8.39)
+    - [ 17.69 min] PICKUP   P69  at ( 6.41,  8.93)
+    - [ 20.43 min] PICKUP   P77  at ( 6.20, 10.75)
+    - [ 36.76 min] DROPOFF  P77  at (12.05, 20.00)
 
-  动画已保存至: dongtai\results\dynamic_GA\vehicle_2_dynamic_unified.gif
+  动画已保存至: results/dynamic_GA/vehicle_2_dynamic_unified.gif
 
 --- 车辆 3.0 ---
-  服务乘客数 (已送达): 0
+  服务乘客数 (已送达): 1
   服务历史 (按时间顺序):
     - [  6.79 min] PICKUP   P2   at ( 6.62, 13.06)
-    - [ 10.28 min] PICKUP   P34  at ( 8.88, 13.57)
-    - [ 15.33 min] PICKUP   P55  at (10.57, 13.31)
-    - [ 18.13 min] PICKUP   P64  at (13.12, 13.14)
+    - [ 16.84 min] PICKUP   P43  at ( 7.64, 15.44)
+    - [ 18.83 min] PICKUP   P57  at ( 7.05, 14.25)
+    - [ 20.81 min] PICKUP   P82  at ( 7.75, 13.11)
+    - [ 29.39 min] DROPOFF  P82  at ( 3.59,  9.15)
 
-  动画已保存至: dongtai\results\dynamic_GA\vehicle_3_dynamic_unified.gif
+  动画已保存至: results/dynamic_GA/vehicle_3_dynamic_unified.gif
 
